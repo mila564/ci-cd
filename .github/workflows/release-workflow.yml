@@ -1,0 +1,26 @@
+name: release-workflow
+
+on: 
+  push:
+    branches:
+      - 'release/**'
+
+jobs:
+  build:
+    name: Build Java application
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2
+      
+      - name: Set up java version
+        uses: actions/setup-java@v1
+        with:
+          java-version: 15
+      
+      - name: Run Unitary tests
+        run: mvn -B '-Dtest=es.urjc.code.daw.library.unitary.*Test' test
+
+      - name: Run Rest tests
+        run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' test
+    
